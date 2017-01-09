@@ -1,0 +1,22 @@
+
+Create application:
+  d:\prj\apache-maven-3.3.9\bin\mvn archetype:create -DgroupId=com.romanpulov -DartifactId=violetnote-ws -DarchetypeArtifactId=maven-archetype-webapp
+
+Config maven:
+  Settings.xml:
+    <server>
+      <id>TomcatDevServer</id>
+      <username>admin</username>
+      <password>admin</password>
+    </server>
+
+Tomcat config:
+  tomcat-users.xml:
+    <role rolename="manager-gui"/>
+    <user username="admin" password="admin" roles="manager-gui"/>
+  
+Deploy to TomCat:
+  plugin tomcat7-maven-plugin
+
+Command:
+  d:\prj\apache-maven-3.3.9\bin\mvn tomcat7:deploy 
