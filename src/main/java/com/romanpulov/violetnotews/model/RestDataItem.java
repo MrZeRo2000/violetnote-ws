@@ -1,16 +1,6 @@
 package com.romanpulov.violetnotews.model;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-/**
- * Created by rpulov on 09.01.2017.
- */
-
-@XmlRootElement(name = "DataItem")
-public class DataItem {
-
+public class RestDataItem {
     private int id;
 
     private String name;
@@ -19,7 +9,6 @@ public class DataItem {
         id = value;
     }
 
-    @XmlElement
     public int getId() {
         return id;
     }
@@ -28,9 +17,11 @@ public class DataItem {
         name = value;
     }
 
-    @XmlElement
     public String getName() {
         return name;
     }
 
+    public RestDataItem(){
+
+    }
 }
