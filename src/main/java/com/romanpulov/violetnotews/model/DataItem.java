@@ -1,5 +1,7 @@
 package com.romanpulov.violetnotews.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,6 +22,7 @@ public class DataItem {
     }
 
     @XmlElement
+    @JsonProperty("id_as_property")
     public int getId() {
         return id;
     }
