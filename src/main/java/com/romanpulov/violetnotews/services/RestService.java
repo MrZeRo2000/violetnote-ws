@@ -3,7 +3,10 @@ package com.romanpulov.violetnotews.services;
 import com.romanpulov.violetnotews.model.DataItem;
 import com.romanpulov.violetnotews.model.RestDataItem;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -43,6 +46,13 @@ public class RestService {
         }
 
         return result;
+    }
+
+    @Path("/props")
+    @GET
+    @Produces("text/html")
+    public String readProperties(@Context Application app) {
+        return app.getProperties().toString();
     }
 
 }
