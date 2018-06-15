@@ -1,5 +1,10 @@
 package com.romanpulov.violetnotews.services;
 
+import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
+import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
+import com.romanpulov.violetnotecore.Model.PassData;
+import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
+import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
 import com.romanpulov.violetnotews.model.DataItem;
 import com.romanpulov.violetnotews.model.RestDataItem;
 
@@ -10,8 +15,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 
 /**
  * Created by rpulov on 09.01.2017.
@@ -60,5 +64,27 @@ public class RestService {
     public String readProperties() {
         return context.getInitParameter("fileName");
     }
+
+    @Path("/readdata")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public PassData readData(@QueryParam("password") String password) throws Exception {
+        String fileName = context.getInitParameter("fileName");
+        PassData result = null;
+
+
+
+        File f = new File(fileName);
+        if (f.exists()) {
+            try (InputStream input = AESCryptService.generateCryptInputStream(new FileInputStream(f), password)) {
+                return (new XMLPassDataReader()).readStream(input);
+            } catch (AESCryptException | IOException | DataReadWriteException e) {
+                e.printStackTrace();
+                throw e;                
+            }
+        } else
+            throw new IOException("File " + fileName + " not found");
+    }
+
 
 }
