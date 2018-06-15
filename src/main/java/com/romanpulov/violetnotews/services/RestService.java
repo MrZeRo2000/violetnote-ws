@@ -3,7 +3,9 @@ package com.romanpulov.violetnotews.services;
 import com.romanpulov.violetnotews.model.DataItem;
 import com.romanpulov.violetnotews.model.RestDataItem;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
@@ -17,6 +19,10 @@ import java.io.FileReader;
 
 @Path("/")
 public class RestService {
+
+    @Context Application app;
+    @Context
+    ServletContext context;
 
     @Path("/message")
     @GET
@@ -51,8 +57,8 @@ public class RestService {
     @Path("/props")
     @GET
     @Produces("text/html")
-    public String readProperties(@Context Application app) {
-        return app.getProperties().toString();
+    public String readProperties() {
+        return context.getInitParameter("fileName");
     }
 
 }
