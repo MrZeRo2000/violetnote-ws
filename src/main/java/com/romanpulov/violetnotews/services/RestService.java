@@ -5,11 +5,10 @@ import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
 import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
+import com.romanpulov.violetnotews.services.exception.FileNotFoundException;
+import com.romanpulov.violetnotews.services.exception.FileReadException;
 import com.romanpulov.violetnotews.model.DataItem;
-import com.romanpulov.violetnotews.model.RestDataItem;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
@@ -68,11 +67,11 @@ public class RestService {
     @Path("/readdata")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public PassData readData(@QueryParam("password") String password) throws Exception {
+    public PassData readData(@QueryParam("password") String password) throws FileReadException, FileNotFoundException
+
+    {
         String fileName = context.getInitParameter("fileName");
         PassData result = null;
-
-
 
         File f = new File(fileName);
         if (f.exists()) {
@@ -80,11 +79,10 @@ public class RestService {
                 return (new XMLPassDataReader()).readStream(input);
             } catch (AESCryptException | IOException | DataReadWriteException e) {
                 e.printStackTrace();
-                throw e;                
+                throw new FileReadException(e.getMessage());
             }
         } else
-            throw new IOException("File " + fileName + " not found");
+            throw new FileNotFoundException(fileName);
     }
-
 
 }
