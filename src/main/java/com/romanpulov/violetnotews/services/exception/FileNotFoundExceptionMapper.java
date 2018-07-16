@@ -8,9 +8,9 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class FileReadExceptionMapper implements ExceptionMapper<FileReadException> {
+public class FileNotFoundExceptionMapper implements ExceptionMapper<FileNotFoundException> {
     @Override
-    public Response toResponse(FileReadException e) {
+    public Response toResponse(FileNotFoundException e) {
         return Response.status(Response.Status.NOT_FOUND)
                 .entity(new RestExceptionResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage()))
                 .type(MediaType.APPLICATION_JSON).build();

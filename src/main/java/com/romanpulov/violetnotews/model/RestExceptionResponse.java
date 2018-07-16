@@ -16,13 +16,13 @@ public class RestExceptionResponse {
     }
 
     @XmlElement
-    @JsonProperty("code")
+    @JsonProperty("errorCode")
     public int getCode() {
         return this.code;
     }
 
     @XmlElement
-    @JsonProperty("message")
+    @JsonProperty("errorMessage")
     public String getMessage() {
         return this.message;
     }
