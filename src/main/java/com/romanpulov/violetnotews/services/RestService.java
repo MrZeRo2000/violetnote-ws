@@ -71,7 +71,6 @@ public class RestService {
 
     {
         String fileName = context.getInitParameter("fileName");
-        PassData result = null;
 
         File f = new File(fileName);
         if (f.exists()) {
@@ -79,7 +78,10 @@ public class RestService {
                 return (new XMLPassDataReader()).readStream(input);
             } catch (AESCryptException | IOException | DataReadWriteException e) {
                 e.printStackTrace();
-                throw new FileReadException(e.getMessage());
+                if (e instanceof IOException) {
+                    throw new FileReadException("Data file read error: " + e.getMessage());
+                } else
+                    throw new FileReadException("Data decryption error: " + e.getMessage());
             }
         } else
             throw new FileNotFoundException(fileName);
