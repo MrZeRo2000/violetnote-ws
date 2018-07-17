@@ -71,6 +71,9 @@ public class RestService {
 
     {
         String fileName = context.getInitParameter("fileName");
+        if (fileName == null) {
+            throw new FileNotFoundException("null");
+        }
 
         File f = new File(fileName);
         if (f.exists()) {

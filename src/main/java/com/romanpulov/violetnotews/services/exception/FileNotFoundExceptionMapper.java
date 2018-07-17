@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 public class FileNotFoundExceptionMapper implements ExceptionMapper<FileNotFoundException> {
     @Override
     public Response toResponse(FileNotFoundException e) {
-        return Response.status(Response.Status.NOT_FOUND)
+        return Response.status(Response.Status.OK)
                 .entity(new RestExceptionResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage()))
                 .type(MediaType.APPLICATION_JSON).build();
     }
