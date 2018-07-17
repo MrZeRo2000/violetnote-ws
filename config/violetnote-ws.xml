@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Context>
-	<Parameter name="fileName" value="C:\Temp1"/>
+	<Parameter name="fileNameTest" value="D:\prj\violetnote-ws\data\test1.vnf"/>
+	<Parameter name="fileName" value="R:\Dropbox\VioletNote\MyPins.vnf"/>
 </Context>
