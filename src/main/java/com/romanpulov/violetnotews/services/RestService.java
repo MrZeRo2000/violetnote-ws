@@ -1,10 +1,16 @@
 package com.romanpulov.violetnotews.services;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptException;
 import com.romanpulov.violetnotecore.AESCrypt.AESCryptService;
 import com.romanpulov.violetnotecore.Model.PassData;
 import com.romanpulov.violetnotecore.Processor.Exception.DataReadWriteException;
 import com.romanpulov.violetnotecore.Processor.XMLPassDataReader;
+import com.romanpulov.violetnotews.model.PasswordDataItem;
 import com.romanpulov.violetnotews.services.exception.FileNotFoundException;
 import com.romanpulov.violetnotews.services.exception.FileReadException;
 import com.romanpulov.violetnotews.model.DataItem;
@@ -89,5 +95,43 @@ public class RestService {
         } else
             throw new FileNotFoundException(fileName);
     }
+
+    @Path("/readdatapost")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public PassData readDataPost(PasswordDataItem passwordDataItem) throws FileReadException, FileNotFoundException
+    {
+        String fileName = context.getInitParameter("fileName");
+        if (fileName == null) {
+            throw new FileNotFoundException("null");
+        }
+
+        /*
+        PasswordDataItem passwordDataItem;
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            passwordDataItem = objectMapper.readValue(data, PasswordDataItem.class);
+        } catch (IOException e) {
+            throw new FileReadException("Password data read error: " + e.getMessage());
+        }
+        */
+
+        File f = new File(fileName);
+        if (f.exists()) {
+            try (InputStream input = AESCryptService.generateCryptInputStream(new FileInputStream(f), passwordDataItem.password)) {
+                return (new XMLPassDataReader()).readStream(input);
+            } catch (AESCryptException | IOException | DataReadWriteException e) {
+                e.printStackTrace();
+                if (e instanceof IOException) {
+                    throw new FileReadException("Data file read error: " + e.getMessage());
+                } else
+                    throw new FileReadException("Data decryption error: " + e.getMessage());
+            }
+        } else
+            throw new FileNotFoundException(fileName);
+    }
+
 
 }
